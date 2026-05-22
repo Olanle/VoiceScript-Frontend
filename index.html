@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VoiceScript - AI Transcription</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<div class="app-wrapper">
+
+  <header>
+    <div class="logo-mark">🎙</div>
+    <div>
+      <div class="logo-text">Voice<span>Script</span></div>
+      <div class="tagline">AI-Powered Transcription Studio</div>
+    </div>
+  </header>
+
+  <!-- Step 1: Upload -->
+  <div class="section-label">01 — Upload Audio</div>
+  <div class="card">
+    <input type="file" id="audioFile" accept="audio/*,.mp3,.wav,.flac,.m4a,.ogg,.webm,.mp4" />
+    <div class="upload-zone" id="uploadZone" role="button" tabindex="0" aria-label="Upload audio file">
+      <span class="upload-icon">🎵</span>
+      <div class="upload-title">Drop your audio file here</div>
+      <div class="upload-subtitle">or click the button below to browse your device</div>
+      <div class="upload-formats">
+        <span class="format-chip">MP3</span>
+        <span class="format-chip">WAV</span>
+        <span class="format-chip">FLAC</span>
+        <span class="format-chip">M4A</span>
+        <span class="format-chip">OGG</span>
+        <span class="format-chip">WEBM</span>
+      </div>
+      <div class="upload-browse-btn">📂 Browse Files</div>
+    </div>
+    <div class="file-preview" id="filePreview">
+      <div class="file-icon">🎧</div>
+      <div class="file-info">
+        <div class="file-name" id="fileName">—</div>
+        <div class="file-size" id="fileSize">—</div>
+      </div>
+      <button class="file-remove" id="fileRemove" title="Remove file">✕</button>
+    </div>
+  </div>
+
+  <!-- Step 2: Model -->
+  <div class="section-label">02 — Choose Formatting Model</div>
+  <div class="card">
+    <div class="field-group">
+      <label class="field-label">Groq LLM Model</label>
+      <div class="model-selector">
+        <label class="model-option">
+          <input type="radio" name="groqModel" value="llama-3.3-70b-versatile" checked />
+          <div class="model-name">Llama 3.3 70B</div>
+          <div class="model-desc">Best quality formatting. Recommended for most use cases.</div>
+        </label>
+        <label class="model-option">
+          <input type="radio" name="groqModel" value="llama-3.1-8b-instant" />
+          <div class="model-name">Llama 3.1 8B</div>
+          <div class="model-desc">Faster and lighter. Great for shorter transcripts.</div>
+        </label>
+        <label class="model-option">
+          <input type="radio" name="groqModel" value="mixtral-8x7b-32768" />
+          <div class="model-name">Mixtral 8x7B</div>
+          <div class="model-desc">Strong on structure with a large context window.</div>
+        </label>
+        <label class="model-option">
+          <input type="radio" name="groqModel" value="gemma2-9b-it" />
+          <div class="model-name">Gemma 2 9B</div>
+          <div class="model-desc">Google's model, clean prose output.</div>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Transcribe -->
+  <div class="section-label">03 — Transcribe</div>
+  <div class="card">
+    <button class="btn-transcribe" id="transcribeBtn" disabled>
+      ✦ Transcribe Audio
+    </button>
+    <div class="progress-panel" id="progressPanel">
+      <div class="progress-steps">
+        <div class="step" id="step1">
+          <div class="step-indicator" id="step1-ind">1</div>
+          <div class="step-content">
+            <div class="step-title">Preparing Audio</div>
+            <div class="step-detail" id="step1-detail">Checking file size and compressing if needed</div>
+          </div>
+        </div>
+        <div class="step" id="step2">
+          <div class="step-indicator" id="step2-ind">2</div>
+          <div class="step-content">
+            <div class="step-title">Transcribing Audio</div>
+            <div class="step-detail" id="step2-detail">Converting speech to raw text with Whisper ASR</div>
+          </div>
+        </div>
+        <div class="step" id="step3">
+          <div class="step-indicator" id="step3-ind">3</div>
+          <div class="step-content">
+            <div class="step-title">Formatting with Groq LLM</div>
+            <div class="step-detail" id="step3-detail">Sending transcript to Groq API for intelligent formatting</div>
+          </div>
+        </div>
+        <div class="step" id="step4">
+          <div class="step-indicator" id="step4-ind">4</div>
+          <div class="step-content">
+            <div class="step-title">Done</div>
+            <div class="step-detail" id="step4-detail">Your formatted transcript is ready</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Output -->
+  <div id="output-section">
+    <div class="output-header">
+      <div class="output-title">Your <span class="italic">Transcript</span></div>
+      <div class="output-actions">
+        <button class="btn-sm" id="copyBtn">📋 Copy</button>
+        <button class="btn-sm" id="downloadBtn">⬇ Download</button>
+      </div>
+    </div>
+    <div class="tab-nav">
+      <button class="tab-btn active" data-tab="formatted">Formatted</button>
+      <button class="tab-btn" data-tab="raw">Raw Transcript</button>
+    </div>
+    <div class="tab-panel active" id="tab-formatted">
+      <div class="transcript-box" id="formattedOutput"></div>
+    </div>
+    <div class="tab-panel" id="tab-raw">
+      <div class="raw-box" id="rawOutput"></div>
+    </div>
+    <div class="stats-bar">
+      <div class="stat"><div class="stat-val" id="stat-words">—</div><div class="stat-label">Words</div></div>
+      <div class="stat"><div class="stat-val" id="stat-chars">—</div><div class="stat-label">Characters</div></div>
+      <div class="stat"><div class="stat-val" id="stat-time">—</div><div class="stat-label">Est. Read Time</div></div>
+      <div class="stat"><div class="stat-val" id="stat-proc">—</div><div class="stat-label">Process Time</div></div>
+    </div>
+    <button class="btn-reset" id="resetBtn">↺ Transcribe Another File</button>
+  </div>
+
+</div>
+
+<div class="toast" id="errorToast">
+  <div class="toast-title">⚠ Error</div>
+  <div id="toastMsg"></div>
+</div>
+
+<!-- config.js must load before app.js — it defines the CONFIG global -->
+<script src="config.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
