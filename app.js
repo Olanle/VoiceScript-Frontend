@@ -167,7 +167,7 @@ transcribeBtn.addEventListener('click', async () => {
     document.getElementById(`step${i}-ind`).innerHTML = String(i);
   }
 
-  const model = 'gemini-1.5-flash';
+  const model      = document.querySelector('input[name="groqModel"]:checked').value;
   const LIMIT_BYTES = 24 * 1024 * 1024;
 
   try {
