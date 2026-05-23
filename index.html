@@ -55,27 +55,27 @@
   <div class="section-label">02 — Choose Formatting Model</div>
   <div class="card">
     <div class="field-group">
-      <label class="field-label">Groq LLM Model</label>
+      <label class="field-label">Formatting Model</label>
       <div class="model-selector">
         <label class="model-option">
-          <input type="radio" name="groqModel" value="llama-3.3-70b-versatile" checked />
+          <input type="radio" name="groqModel" value="models/gemini-2.5-flash" checked />
+          <div class="model-name">Gemini 2.5 Flash</div>
+          <div class="model-desc">Very good quality. Very fast. 1M token context window.</div>
+        </label>
+        <label class="model-option">
+          <input type="radio" name="groqModel" value="models/gemini-2.5-pro" />
+          <div class="model-name">Gemini 2.5 Pro</div>
+          <div class="model-desc">Excellent quality. Best for long or complex transcripts.</div>
+        </label>
+        <label class="model-option">
+          <input type="radio" name="groqModel" value="llama-3.3-70b-versatile" />
           <div class="model-name">Llama 3.3 70B</div>
-          <div class="model-desc">Best quality formatting. Recommended for most use cases.</div>
+          <div class="model-desc">Very good quality. Very fast via Groq.</div>
         </label>
         <label class="model-option">
           <input type="radio" name="groqModel" value="llama-3.1-8b-instant" />
           <div class="model-name">Llama 3.1 8B</div>
-          <div class="model-desc">Faster and lighter. Great for shorter transcripts.</div>
-        </label>
-        <label class="model-option">
-          <input type="radio" name="groqModel" value="mixtral-8x7b-32768" />
-          <div class="model-name">Mixtral 8x7B</div>
-          <div class="model-desc">Strong on structure with a large context window.</div>
-        </label>
-        <label class="model-option">
-          <input type="radio" name="groqModel" value="gemma2-9b-it" />
-          <div class="model-name">Gemma 2 9B</div>
-          <div class="model-desc">Google's model, clean prose output.</div>
+          <div class="model-desc">Good quality. Fastest response via Groq.</div>
         </label>
       </div>
     </div>
@@ -106,8 +106,8 @@
         <div class="step" id="step3">
           <div class="step-indicator" id="step3-ind">3</div>
           <div class="step-content">
-            <div class="step-title">Formatting with Groq LLM</div>
-            <div class="step-detail" id="step3-detail">Sending transcript to Groq API for intelligent formatting</div>
+            <div class="step-title">Formatting Transcript</div>
+            <div class="step-detail" id="step3-detail">Sending transcript to selected model for intelligent formatting</div>
           </div>
         </div>
         <div class="step" id="step4">
@@ -156,7 +156,6 @@
   <div id="toastMsg"></div>
 </div>
 
-<!-- config.js must load before app.js — it defines the CONFIG global -->
 <script src="config.js"></script>
 <script src="app.js"></script>
 </body>
