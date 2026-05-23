@@ -20,7 +20,7 @@ const resetBtn       = document.getElementById('resetBtn');
 const errorToast     = document.getElementById('errorToast');
 const toastMsg       = document.getElementById('toastMsg');
 
-// ── Helpers ────────────────────────────────────────────────────
+// Helpers 
 function formatBytes(b) {
   if (b < 1024) return b + ' B';
   if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
@@ -49,7 +49,7 @@ function showError(msg) {
   setTimeout(() => errorToast.classList.remove('show'), 7000);
 }
 
-// ── Upload Zone ────────────────────────────────────────────────
+// Upload Zone
 uploadZone.addEventListener('click', () => audioFileInput.click());
 
 uploadZone.addEventListener('keydown', e => {
@@ -73,7 +73,7 @@ uploadZone.addEventListener('drop', e => {
   if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]);
 });
 
-// ── Step UI ────────────────────────────────────────────────────
+// Step UI
 function setStepActive(n) {
   document.getElementById(`step${n}`).classList.add('active');
   document.getElementById(`step${n}-ind`).innerHTML = '<div class="spinner"></div>';
@@ -94,7 +94,7 @@ function setStepDetail(n, text) {
   document.getElementById(`step${n}-detail`).textContent = text;
 }
 
-// ── Audio Compression ──────────────────────────────────────────
+// Audio Compression
 async function compressAudio(file) {
   return new Promise(async (resolve, reject) => {
     try {
@@ -153,7 +153,7 @@ async function compressAudio(file) {
   });
 }
 
-// ── Main Transcription Flow ────────────────────────────────────
+// Main Transcription Flow
 transcribeBtn.addEventListener('click', async () => {
   if (!selectedFile) return showError('Please select an audio file first.');
 
@@ -171,7 +171,7 @@ transcribeBtn.addEventListener('click', async () => {
   const LIMIT_BYTES = 24 * 1024 * 1024;
 
   try {
-    // ── Step 1 — Prepare Audio ────────────────────────────────
+    // Step 1 — Prepare Audio
     setStepActive(1);
 
     let audioBlob;
@@ -185,7 +185,7 @@ transcribeBtn.addEventListener('click', async () => {
     }
     setStepDone(1);
 
-    // ── Step 2 — Transcribe via Render backend ────────────────
+    // Step 2 — Transcribe via Render backend
     setStepActive(2);
     setStepDetail(2, 'Sending audio to server for transcription…');
 
@@ -209,7 +209,7 @@ transcribeBtn.addEventListener('click', async () => {
     setStepDetail(2, `Done — ${rawTranscript.split(/\s+/).length} words transcribed`);
     setStepDone(2);
 
-    // ── Step 3 — Format via Render backend ───────────────────
+    // Step 3 — Format via Render backend
     setStepActive(3);
     setStepDetail(3, `Formatting transcript on server…`);
 
@@ -230,7 +230,7 @@ transcribeBtn.addEventListener('click', async () => {
     setStepDetail(3, 'Formatting complete ✓');
     setStepDone(3);
 
-    // ── Step 4 — Done ─────────────────────────────────────────
+    // Step 4 — Done
     setStepActive(4);
     const elapsed = ((Date.now() - processStart) / 1000).toFixed(1);
     setStepDetail(4, `Completed in ${elapsed}s — transcript ready below`);
@@ -250,7 +250,7 @@ transcribeBtn.addEventListener('click', async () => {
   }
 });
 
-// ── Render Output ──────────────────────────────────────────────
+// Render Output
 function renderOutput(elapsed) {
   formattedOut.textContent = formattedTranscript;
   rawOut.textContent = rawTranscript;
@@ -270,7 +270,7 @@ function renderOutput(elapsed) {
   transcribeBtn.textContent = '✦ Transcribe Again';
 }
 
-// ── Tabs ───────────────────────────────────────────────────────
+// Tabs
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -280,7 +280,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
   });
 });
 
-// ── Copy ───────────────────────────────────────────────────────
+// Copy
 copyBtn.addEventListener('click', () => {
   const activeTab = document.querySelector('.tab-btn.active').dataset.tab;
   const text = activeTab === 'formatted' ? formattedTranscript : rawTranscript;
@@ -291,7 +291,7 @@ copyBtn.addEventListener('click', () => {
   });
 });
 
-// ── Download ───────────────────────────────────────────────────
+// Download
 downloadBtn.addEventListener('click', () => {
   const blob = new Blob([formattedTranscript || rawTranscript], { type: 'text/plain' });
   const url  = URL.createObjectURL(blob);
@@ -302,7 +302,7 @@ downloadBtn.addEventListener('click', () => {
   URL.revokeObjectURL(url);
 });
 
-// ── Reset ──────────────────────────────────────────────────────
+// Reset
 resetBtn.addEventListener('click', () => {
   outputSection.classList.remove('show');
   progressPanel.classList.remove('show');
